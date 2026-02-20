@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>glass quran · album art player</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <!-- jsmediatags for metadata parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+  <!-- external CSS -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+</head>
+<body>
+<div class="glass-orbit">
+  <!-- track info with dynamic thumbnail and loading spinner -->
+  <div class="track-info">
+    <div class="thumbnail main-thumb" id="thumbnailContainer">
+      <img id="thumbnailImage" src="" alt="cover" style="display: none;">
+      <i id="thumbnailIcon" class="fas fa-quran"></i>
+      <i id="thumbnailSpinner" class="fas fa-spinner fa-pulse" style="display: none;"></i>
+    </div>
+    <div class="track-name" id="currentTrackDisplay">Select a surah</div>
+  </div>
 
+  <!-- progress + time -->
+  <div class="progress-section">
+    <span class="time" id="currentTime">0:00</span>
+    <div class="progress-bar" id="progressBarContainer">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="time" id="durationTime">0:00</span>
+  </div>
+
+  <!-- main control panel -->
+  <div class="control-panel">
+    <button class="ctrl-btn" id="shuffleBtn" title="shuffle"><i class="fas fa-random"></i></button>
+    <button class="ctrl-btn" id="prevBtn" title="previous"><i class="fas fa-step-backward"></i></button>
+    <button class="ctrl-btn" id="playPauseBtn" title="play/pause"><i class="fas fa-play" id="playPauseIcon"></i></button>
+    <button class="ctrl-btn" id="stopBtn" title="stop"><i class="fas fa-stop"></i></button>
+    <button class="ctrl-btn" id="nextBtn" title="next"><i class="fas fa-step-forward"></i></button>
+    <button class="ctrl-btn" id="repeatBtn" title="repeat"><i class="fas fa-repeat" id="repeatIcon"></i></button>
+  </div>
+
+  <!-- second row: volume & extra controls -->
+  <div class="control-panel" style="margin-top: 0.2rem;">
+    <button class="ctrl-btn small" id="muteBtn" title="mute"><i class="fas fa-volume-high" id="muteIcon"></i></button>
+    <button class="ctrl-btn small" id="volDownBtn" title="volume -"><i class="fas fa-volume-down"></i></button>
+    <div class="volume-group">
+      <i class="fas fa-volume-low" style="opacity:0.7;"></i>
+      <input type="range" min="0" max="1" step="0.01" value="0.7" class="volume-slider" id="volumeSlider">
+      <i class="fas fa-volume-high" style="opacity:0.7;"></i>
+    </div>
+    <button class="ctrl-btn small" id="volUpBtn" title="volume +"><i class="fas fa-volume-up"></i></button>
+    <button class="ctrl-btn small" id="speedBtn" title="playback speed">1.0x</button>
+  </div>
+
+  <!-- playlist header -->
+  <div class="playlist-head">
+    <span class="playing-indicator" id="liveIndicator" style="opacity:0;"></span>
+    <span><i class="fas fa-list" style="margin-right: 0.5rem;"></i>surahs · recitations</span>
+  </div>
+  <ul class="playlist" id="playlistContainer"></ul>
+
+  <div class="footer-note">— thumbnails for all tracks —</div>
+</div>
+
+<!-- external JavaScript -->
+<script src="script.js"></script>
+</body>
+</html>
