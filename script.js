@@ -6,6 +6,7 @@ let playlistOrder = [];
 let shuffle = false;
 let repeatMode = "none";
 let visualizerCtx = null;
+let audioContext = null;   // will store the Web Audio context
 let visualizerAnalyser = null;
 let visualizerSource = null;
 let animationFrame = null;
@@ -282,11 +283,15 @@ function updatePlaylistOrder() {
 
 // ==================== PLAYBACK CONTROLS ====================
 function togglePlayPause() {
-  if (audio.paused) {
-    audio.play();
-  } else {
-    audio.pause();
-  }
+    if (audio.paused) {
+        // If AudioContext exists and is suspended, resume it
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        audio.play();
+    } else {
+        audio.pause();
+    }
 }
 
 function playPrevious() {
@@ -392,20 +397,15 @@ function handleTrackEnd() {
 
 // ==================== VISUALIZER ====================
 function setupVisualizer() {
-  if (!audio) return;
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  visualizerAnalyser = audioCtx.createAnalyser();
-  visualizerAnalyser.fftSize = 256;
-  const bufferLength = visualizerAnalyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
+ audioContext = new (window.AudioContext || window.webkitAudioContext)();
+visualizerAnalyser = audioContext.createAnalyser();
+visualizerAnalyser.fftSize = 256;
+const bufferLength = visualizerAnalyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
 
-  visualizerSource = audioCtx.createMediaElementSource(audio);
-  visualizerSource.connect(visualizerAnalyser);
-  visualizerAnalyser.connect(audioCtx.destination);
-
-  const canvasCtx = visualizerCanvas.getContext("2d");
-  const WIDTH = visualizerCanvas.width;
-  const HEIGHT = visualizerCanvas.height;
+visualizerSource = audioContext.createMediaElementSource(audio);
+visualizerSource.connect(visualizerAnalyser);
+visualizerAnalyser.connect(audioContext.destination);
 
   function draw() {
     animationFrame = requestAnimationFrame(draw);
